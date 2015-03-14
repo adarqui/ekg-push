@@ -1,6 +1,6 @@
 name:                ekg-push
 version:             0.0.1
-synopsis:            Flush metric deltas to a callback.
+synopsis:            Small framework to push metric deltas from ekg-core to a callback.
 description:
   This library lets you supply metric deltas to an IO action callback.
 homepage:            https://github.com/adarqui/ekg-push
