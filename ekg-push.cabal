@@ -1,8 +1,8 @@
 name:                   ekg-push
 version:                0.0.2
-synopsis:               Small framework to push metric deltas to a broadcast channel.
+synopsis:               Small framework to push metric deltas to a broadcast channel using the ekg-core library.
 description:
-  This library lets you push metric samples to a broadcast channel. Consumers can then persist the samples as they wish. This is based heavily off of the ekg-statsd package which can be found at: https://github.com/tibbe/ekg-statsd
+  This library lets you push metric samples to a broadcast channel. Consumers can then persist the samples as they wish.
 homepage:               https://github.com/adarqui/ekg-push
 bug-reports:            https://github.com/adarqui/ekg-push/issues
 license:                BSD3

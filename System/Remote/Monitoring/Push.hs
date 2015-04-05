@@ -5,6 +5,8 @@
 {-# LANGUAGE ScopedTypeVariables #-}
 -- | This library lets you push metric samples to a broadcast channel.
 -- Consumers can then persist the metrics samples as they wish.
+-- ekg-push is based heavily off of the ekg-statsd package which
+-- can be found at: https://github.com/tibbe/ekg-statsd
 --
 -- Example usage:
 --
