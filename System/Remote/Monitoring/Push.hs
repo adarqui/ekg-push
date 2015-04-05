@@ -15,13 +15,18 @@
 -- function defined in that package.
 module System.Remote.Monitoring.Push
     (
-      pushThreadId
-    , forkPush
+      Push
+    , PushChan
     , PushOptions(..)
+    , pushThreadId
+    , forkPush
     , defaultPushOptions
+    , subscribe
+    , consume
     ) where
 
 import Control.Concurrent (ThreadId, myThreadId, threadDelay, throwTo)
+import Control.Concurrent.Chan (Chan, newChan, writeChan, readChan, dupChan)
 import qualified Data.HashMap.Strict as M
 import Data.Int (Int64)
 import qualified Data.Text as T
@@ -40,7 +45,15 @@ import Prelude hiding (catch)
 -- Created by 'forkPush'.
 data Push = Push
     { threadId :: {-# UNPACK #-} !ThreadId
+    , mainCh :: Chan (Metrics.Sample)
     }
+
+-- | A new PushChan is created on every call to subscribe.
+-- This is essentially a dupChan of our main channel (mainCh).
+data PushChan = PushChan
+    { ch :: PushChanType }
+    
+type PushChanType = Chan Metrics.Sample
 
 -- | The thread ID of the push sync thread. You can stop the sync by
 -- killing this thread (i.e. by throwing it an asynchronous
@@ -86,32 +99,44 @@ defaultPushOptions = PushOptions
 -- | Create a thread that periodically flushes the metrics in the
 -- store to push.
 forkPush :: PushOptions  -- ^ Options
-           -> (Metrics.Sample -> IO ()) -- ^ Callback
            -> Metrics.Store  -- ^ Metric store
            -> IO Push      -- ^ Push sync handle
-forkPush opts cb store = do
+forkPush opts store = do
     me <- myThreadId
-    tid <- forkFinally (loop cb store emptySample opts) $ \ r -> do
+    ch <- newChan
+    tid <- forkFinally (loop ch store emptySample opts) $ \ r -> do
         case r of
             Left e  -> throwTo me e
             Right _ -> return ()
-    return $ Push tid
+    return $ Push tid ch
     where
         emptySample = M.empty
 
-loop :: (Metrics.Sample -> IO ()) -- ^ Callback
+loop :: PushChanType -- ^ ekg-push clients subscribe to this channel
      -> Metrics.Store   -- ^ Metric Store
      -> Metrics.Sample  -- ^ Last sampled metrics
      -> PushOptions  -- ^ Options
      -> IO ()
-loop cb store lastSample opts = do
+loop ch store lastSample opts = do
     start <- time
     sample <- Metrics.sampleAll store
     let !diff = diffSamples opts lastSample sample
-    cb diff -- call cb with our difference between the last poll and our current poll
+    writeChan ch diff -- Write the Metrics.Sample to our broadcast channel.
     end <- time
     threadDelay (flushInterval opts * 1000 - fromIntegral (end - start))
-    loop cb store sample opts
+    loop ch store sample opts
+
+-- | Subscribe to the push broadcast channel.
+subscribe :: Push -> IO PushChan
+subscribe Push{..} = do
+    ch' <- dupChan mainCh
+    return $ PushChan {
+        ch = ch'
+    }
+
+-- | Consume a Metrics.Sample message from a subscribed channel.
+consume :: PushChan -> IO Metrics.Sample
+consume PushChan{..} = readChan ch
 
 -- | Microseconds since epoch.
 time :: IO Int64
