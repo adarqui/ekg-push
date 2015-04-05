@@ -1,13 +1,7 @@
-## 0.2.0.1 (2014-09-30)
+## 0.0.1 (2015-03-20)
 
- * Add support for text-1.2.
+ * Push agents "subscribe" via IO Action callbacks.
 
-## 0.2.0.0 (2014-05-27)
+## 0.0.2 (2015-04-05)
 
- * Add configurable metric name prefix and suffix.
- * Add support for GHC 7.4.
-
-## 0.1.0.0 (2014-05-01)
-
- * Initial release.
-
+ * Push agents subscribe via a broadcast channel.
