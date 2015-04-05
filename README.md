@@ -1,4 +1,4 @@
-# Modifications of ekg-statsd by Johan Tibbel to provide a generic "push" framework.
+# Modifications of ekg-statsd by Johan Tibell to provide a generic "push" framework.
 
 Eventually I should perhaps write to a Chan instead of calling the IO action?
 
