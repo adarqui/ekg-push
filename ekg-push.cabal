@@ -6,13 +6,14 @@ description:
 homepage:               https://github.com/adarqui/ekg-push
 bug-reports:            https://github.com/adarqui/ekg-push/issues
 license:                BSD3
-license-file:           LICENSE
+license-files:          LICENSE, LICENSE.Tibell
 author:                 Andrew Darqui
 maintainer:             andrew.darqui@gmail.com
 category:               System
 build-type:             Simple
 extra-source-files:     CHANGES.md
 cabal-version:          >=1.10
+extra-source-files:     Makefile, README.md
 
 library
     exposed-modules:     
