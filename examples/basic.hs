@@ -29,7 +29,7 @@ main = do
 
     -- Create two different subscriptions (ch1 & ch2)
     ch1 <- subscribe push
-    _ <-forkIO $ forever $ do
+    _ <- forkIO $ forever $ do
             msg <- consume ch1
             putStrLn $ "subscription #1: " ++ show  msg
 
