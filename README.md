@@ -2,6 +2,18 @@
 
 You will notice this is almost identical to ekg-statsd. It's just me trying to abstract away the basic functionality found in ekg-statsd, so not to have to duplicate this code anywhere else. Eventually I may try to clean up this "abstraction" and create a PR in ekg-core.
 
+# TODO: Soon
+
+So, the idea of ekg-push is to create a simple framework so that I can create agents such as:
+- ekg-push-redis
+- ekg-push-file
+- ekg-push-statsd
+- ekg-push-uberlog
+
+etc..
+
+Push agents simply 'subscribe' to the push handle returned by forkPush. Once subscribed, agents call consume and handle the Metric.Sample data how they want.
+
 # Getting started
 
 See examples/basic.hs
