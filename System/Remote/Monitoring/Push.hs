@@ -3,12 +3,17 @@
 {-# LANGUAGE OverloadedStrings #-}
 {-# LANGUAGE RecordWildCards #-}
 {-# LANGUAGE ScopedTypeVariables #-}
--- | This module lets you periodically supply metric deltas to an IO action.
+-- | This library lets you push metric samples to a broadcast channel.
+-- Consumers can then persist the metrics samples as they wish.
+--
 -- Example usage:
 --
 -- > main = do
 -- >     store <- newStore
--- >     forkPush defaultPushOptions store
+-- >     push <- forkPush defaultPushOptions store
+-- >     ch <- subscribe push
+-- >     sample <- consume ch
+-- >     putStrLn $ show sample
 --
 -- You probably want to include some of the predefined metrics defined
 -- in the ekg-core package, by calling e.g. the 'registerGcStats'

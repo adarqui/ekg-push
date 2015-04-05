@@ -14,6 +14,14 @@ etc..
 
 Push agents simply 'subscribe' to the push handle returned by forkPush. Once subscribed, agents call consume and handle the Metric.Sample data how they want.
 
+# Installation
+
+You can just type 'make' to install ekg-push into a local sandbox. Or you can use cabal:
+
+```
+cabal install ekg-push
+```
+
 # Getting started
 
 See examples/basic.hs
