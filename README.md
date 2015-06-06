@@ -24,6 +24,11 @@ cabal install ekg-push
 
 # Getting started
 
+```
+make examples
+./.cabal-sandbox/bin/basic
+```
+
 See examples/basic.hs
 
 ```
